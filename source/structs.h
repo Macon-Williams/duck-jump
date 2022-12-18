@@ -19,25 +19,33 @@ typedef struct {
 } Button;
 
 typedef struct {
+    SDL_Texture *sprite;
+    int loc_x, loc_y;
+    int size_x, size_y;
+    int bounce_value;
+} Platform;
+
+typedef struct {
     Button playButton;
     Button exitButton;
     Button scoreButton;
     Button optionButton;
+    Platform menuPlatform;
 } MenuButtons;
 
 typedef struct {
     TTF_Font *menuFont;
     SDL_Texture *titleText;
-    // SDL_Texture *buttonPlayText;
-    // SDL_Texture *buttonScoreText;
-    // SDL_Texture *buttonOptionText;
-    // SDL_Texture *buttonExitText;
 } Text;
 
 typedef struct {
     SDL_Texture *duckSprite;
     SDL_Rect duckClip[2];
-    int vel_x, vel_y;
+    int frame;
+    int loc_x, loc_y;
+    int size_x, size_y;
+    float velocity_x, velocity_y;
+    float movement_time_x;
     char name[10];
 } Player;
 

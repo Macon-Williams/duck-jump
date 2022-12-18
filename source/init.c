@@ -56,6 +56,9 @@ void initTextures() {
     player.duckSprite = loadTexture(PLAYER_SPRITE_PATH);
     initClip(player.duckClip, 2, 16, 16);
 
+    player.size_x = 64;
+    player.size_y = 64;
+
     menu.playButton.buttonImage = loadTexture(PLAY_BUTTON_SPRITE_PATH);
     initClip(menu.playButton.buttonClip, 3, 108, 44);
 
@@ -67,6 +70,11 @@ void initTextures() {
 
     menu.exitButton.buttonImage = loadTexture(BUTTON_SPRITE_PATH);
     initClip(menu.exitButton.buttonClip, 3, 96, 26);
+
+    menu.menuPlatform.sprite = loadTexture(PLATFORM_SPRITE_PATH);
+    menu.menuPlatform.loc_y = 500;
+    menu.menuPlatform.size_x = 128;
+    menu.menuPlatform.size_y = 32;
 }
 
 SDL_Texture *generateText(char* text, SDL_Color textColor) {

@@ -16,11 +16,6 @@ void quit() {
     exit(EXIT_SUCCESS);
 }
 
-void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
-    SDL_Rect renderQuad = {x, y, 64, 64};
-    SDL_RenderCopy(game.renderer, sprite, clip, &renderQuad);
-}
-
 int main(void) {
     initSDL();
     initTextures();
@@ -28,22 +23,18 @@ int main(void) {
     initButtons();
 
     SDL_Event event;
-    int frame = 0;
     
     while(1) {
+        player.loc_x = 200;
+        player.loc_y = 250;
+
         while(currentGameState == MENU) {
             checkSDLPollEventMenu(event);
-
             renderMainMenu();
-            renderSprite((SCREEN_WIDTH - 64)/3, (SCREEN_HEIGHT - 64) /2, player.duckSprite, &player.duckClip[frame]);
-
+            updateDuck();
             SDL_RenderPresent(game.renderer);
-            SDL_Delay(200);
+            SDL_Delay(20);
 
-           ++frame;
-           if (frame >= 2) {
-               frame = 0;
-           }
         }
 
         while(currentGameState == RUNNING) {

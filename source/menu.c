@@ -61,6 +61,30 @@ void renderMainMenu() {
     }
     SDL_Rect exitTextRenderQuad = {menu.exitButton.text_loc_x, menu.exitButton.text_loc_y, menu.exitButton.text_size_x, menu.exitButton.text_size_y};
     SDL_RenderCopy(game.renderer, menu.exitButton.buttonText, NULL, &exitTextRenderQuad);
+
+    SDL_Rect menuPlatformRenderQuad = {(player.loc_x - player.size_x / 2), menu.menuPlatform.loc_y, menu.menuPlatform.size_x, menu.menuPlatform.size_y};
+    SDL_RenderCopy(game.renderer, menu.menuPlatform.sprite, NULL, &menuPlatformRenderQuad);
+
+}
+
+void updateDuck() {
+    renderSprite(player.loc_x, player.loc_y, player.duckSprite, &player.duckClip[player.frame]);
+    checkCollision();
+    updateYVelocity(&player, GRAVITY);
+}
+
+void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
+    SDL_Rect renderQuad = {x, y, player.size_x, player.size_y};
+    SDL_RenderCopy(game.renderer, sprite, clip, &renderQuad);
+}
+
+void checkCollision() {
+    if (player.loc_y + player.size_y >= menu.menuPlatform.loc_y) {
+        player.velocity_y = -15;
+        player.frame = 1;
+    } else {
+        player.frame = 0;
+    }
 }
 
 void checkSDLPollEventMenu(SDL_Event event) {

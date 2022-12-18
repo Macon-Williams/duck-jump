@@ -1,5 +1,5 @@
 # Files to compile
-OBJS = main.c init.c menu.c
+OBJS = main.c init.c menu.c physics.c
 
 # Compiler to use
 CC = gcc
