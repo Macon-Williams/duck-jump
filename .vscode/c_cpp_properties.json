@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/homebrew/include/SDL2",
+                "/opt/homebrew/Cellar/sdl2/2.26.1/include",
+                "/opt/homebrew/Cellar/sdl2_image/2.6.2/include",
+                "./",
+                "/opt/homebrew/Cellar/sdl2_ttf/2.20.1/include",
+                "/opt/homebrew/Cellar/sdl2_mixer/2.6.2/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c99",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-arm64"
+        }
+    ],
+    "version": 4
+}

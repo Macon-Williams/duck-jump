@@ -15,7 +15,7 @@ void initSDL() {
 
     // Create a game window
     game.window = SDL_CreateWindow("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                                    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+                                    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     if (!game.window) {
         printf("Failed to create window! SDL Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);

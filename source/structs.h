@@ -37,6 +37,7 @@ typedef struct {
 typedef struct {
     SDL_Texture *duckSprite;
     SDL_Rect duckClip[2];
+    int vel_x, vel_y;
     char name[10];
 } Player;
 

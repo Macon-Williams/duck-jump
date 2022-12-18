@@ -38,7 +38,7 @@ int main(void) {
             renderSprite((SCREEN_WIDTH - 64)/3, (SCREEN_HEIGHT - 64) /2, player.duckSprite, &player.duckClip[frame]);
 
             SDL_RenderPresent(game.renderer);
-            SDL_Delay(20);
+            SDL_Delay(200);
 
            ++frame;
            if (frame >= 2) {
