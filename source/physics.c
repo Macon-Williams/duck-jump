@@ -4,9 +4,7 @@ void updateXVelocity(Player* player, double deltaTime) {
     double acceleration;
     if (player->move_x) {
         acceleration = player->move_x * PLAYER_MOVEMENT_ACCELERAITON;
-        //player->velocity_x = player->velocity_x + acceleration * deltaTime;
         player->loc_x = player->loc_x + 300 * player->move_x * deltaTime + player->velocity_x * deltaTime + 0.5f * acceleration * deltaTime * deltaTime;
-        printf("player x: %f\n", player->loc_x);
         player->velocity_x = player->velocity_x + acceleration * deltaTime;
         
     } else {
@@ -17,7 +15,6 @@ void updateXVelocity(Player* player, double deltaTime) {
         //     player->velocity_x = player->velocity_x + 2;
         // }
     }
-    //player->loc_x = player->loc_x + player->velocity_x;
 }
 
 void gravity(Player* player, double deltaTime) {

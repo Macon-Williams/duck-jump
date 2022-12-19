@@ -57,15 +57,14 @@ int main(void) {
             accumulated_seconds += game.timer.deltaTime;
 
             if (accumulated_seconds > CYCLE_TIME - FLT_EPSILON) {
-                accumulated_seconds += game.timer.deltaTime;
+                accumulated_seconds = 0;
                 physicsTick();
                 renderMainMenu();
                 updateDuck();
                 checkSDLPollEventMenu(event);
                 SDL_RenderPresent(game.renderer);
-            } else {
-                SDL_Delay(1);
-            }
+                SDL_Delay(5);
+            } 
         }
 
         while(currentGameState == RUNNING) {
