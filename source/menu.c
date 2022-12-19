@@ -65,12 +65,14 @@ void renderMainMenu() {
     SDL_Rect menuPlatformRenderQuad = {(player.loc_x - player.size_x / 2), menu.menuPlatform.loc_y, menu.menuPlatform.size_x, menu.menuPlatform.size_y};
     SDL_RenderCopy(game.renderer, menu.menuPlatform.sprite, NULL, &menuPlatformRenderQuad);
 
+    renderSprite((int) player.loc_x, (int) player.loc_y, player.duckSprite, &player.duckClip[player.frame]);
+
 }
 
 void updateDuck() {
-    renderSprite(player.loc_x, player.loc_y, player.duckSprite, &player.duckClip[player.frame]);
     checkCollision();
-    updateYVelocity(&player, GRAVITY);
+    gravity(&player, game.elapsedSeconds);
+    updateXVelocity(&player, game.elapsedSeconds);
 }
 
 void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
@@ -80,7 +82,7 @@ void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
 
 void checkCollision() {
     if (player.loc_y + player.size_y >= menu.menuPlatform.loc_y) {
-        player.velocity_y = -15;
+        player.velocity_y = -1200; // Jump
         player.frame = 1;
     } else {
         player.frame = 0;
@@ -144,6 +146,29 @@ void checkSDLPollEventMenu(SDL_Event event) {
                 }
             } else {
                 menu.exitButton.state = MOUSE_OUT;
+            }
+        }
+        if (event.type == SDL_KEYDOWN) {
+            switch(event.key.keysym.sym) {
+                case SDLK_RIGHT:
+                    player.move_x = 1;
+                    break;
+                case SDLK_LEFT:
+                    player.move_x = -1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (event.type == SDL_KEYUP) {
+            switch(event.key.keysym.sym) {
+                case SDLK_RIGHT:
+                // Fall through
+                case SDLK_LEFT:
+                    player.move_x = 0;
+                    break;
+                default:
+                    break;
             }
         }
     }

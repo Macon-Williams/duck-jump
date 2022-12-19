@@ -15,14 +15,14 @@ void initSDL() {
 
     // Create a game window
     game.window = SDL_CreateWindow("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                                    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+                                    SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (!game.window) {
         printf("Failed to create window! SDL Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
     }
 
     // Create a game renderer
-    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
+    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
     if (!game.renderer) {
         printf("Failed to create renderer! SDL Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);

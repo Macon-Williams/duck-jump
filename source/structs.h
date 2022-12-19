@@ -5,6 +5,8 @@
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    Uint64 previousTicks, currentTicks, ticksPerSecond;
+    float elapsedSeconds;
 } Game;
 
 typedef struct {
@@ -42,10 +44,10 @@ typedef struct {
     SDL_Texture *duckSprite;
     SDL_Rect duckClip[2];
     int frame;
-    int loc_x, loc_y;
+    double loc_x, loc_y;
     int size_x, size_y;
-    float velocity_x, velocity_y;
-    float movement_time_x;
+    double velocity_x, velocity_y;
+    int move_x, move_y;
     char name[10];
 } Player;
 

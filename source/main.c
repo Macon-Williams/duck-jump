@@ -10,17 +10,12 @@ Text menuText;
 enum gameState{MENU, RUNNING, SCORE, CLOSE};
 enum gameState currentGameState = MENU;
 
-Uint64 previousTicks, currentTicks, ticksPerSecond;
-float elapsedSeconds;
-
 void tick() {
-    currentTicks = SDL_GetPerformanceCounter();
-    Uint64 delta = currentTicks - previousTicks;
-    // printf("delta: %llu\n", delta);
-    previousTicks = currentTicks;
-    ticksPerSecond = SDL_GetPerformanceFrequency();
-    elapsedSeconds = delta / (float) ticksPerSecond;
-    // printf("Elapsed seconds: %f\n", elapsedSeconds);
+    game.currentTicks = SDL_GetPerformanceCounter();
+    Uint64 delta = game.currentTicks - game.previousTicks;
+    game.previousTicks = game.currentTicks;
+    game.ticksPerSecond = SDL_GetPerformanceFrequency();
+    game.elapsedSeconds = (double) delta / (double) game.ticksPerSecond;
 }
 
 void quit() {
@@ -33,15 +28,14 @@ int main(void) {
     initSDL();
     initTextures();
     initFont();
-    initButtons();
+    initButtons();  
 
     const int UPDATE_FREQUENCY = FRAME_RATE;
     const float CYCLE_TIME = 1.0f / UPDATE_FREQUENCY;
-    printf("Cycle time: %f\n", CYCLE_TIME);
     float accumulated_seconds = 0.0f;
 
     SDL_Event event;
-    
+
     while(1) {
         tick();
         player.loc_x = 200;
@@ -49,15 +43,16 @@ int main(void) {
 
         while(currentGameState == MENU) {
             tick();
-            accumulated_seconds += elapsedSeconds;
-            printf("Accumulated_seconds: %f\n", accumulated_seconds);
-            if (accumulated_seconds >= CYCLE_TIME) {
+            // accumulated_seconds += game.elapsedSeconds;
+            // if (accumulated_seconds >= CYCLE_TIME) {
                 accumulated_seconds -= CYCLE_TIME;
-                checkSDLPollEventMenu(event);
                 renderMainMenu();
-                updateDuck();
+                checkSDLPollEventMenu(event);
                 SDL_RenderPresent(game.renderer);
-            }
+            // }
+            updateDuck();
+
+
         }
 
         while(currentGameState == RUNNING) {
