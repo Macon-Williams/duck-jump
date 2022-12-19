@@ -3,10 +3,14 @@
 
 
 typedef struct {
+    Uint64 previousTicks, currentTicks, ticksPerSecond;
+    double deltaTime;
+} Timer;
+
+typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    Uint64 previousTicks, currentTicks, ticksPerSecond;
-    float elapsedSeconds;
+    Timer timer;
 } Game;
 
 typedef struct {

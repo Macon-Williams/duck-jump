@@ -10,12 +10,22 @@ Text menuText;
 enum gameState{MENU, RUNNING, SCORE, CLOSE};
 enum gameState currentGameState = MENU;
 
-void tick() {
-    game.currentTicks = SDL_GetPerformanceCounter();
-    Uint64 delta = game.currentTicks - game.previousTicks;
-    game.previousTicks = game.currentTicks;
-    game.ticksPerSecond = SDL_GetPerformanceFrequency();
-    game.elapsedSeconds = (double) delta / (double) game.ticksPerSecond;
+Timer physicsTimer;
+
+void gameTick() {
+    game.timer.currentTicks = SDL_GetPerformanceCounter();
+    Uint64 delta = game.timer.currentTicks - game.timer.previousTicks;
+    game.timer.previousTicks = game.timer.currentTicks;
+    game.timer.ticksPerSecond = SDL_GetPerformanceFrequency();
+    game.timer.deltaTime = (double) delta / (double) game.timer.ticksPerSecond;
+}
+
+void physicsTick() {
+    physicsTimer.currentTicks = SDL_GetPerformanceCounter();
+    Uint64 delta = physicsTimer.currentTicks - physicsTimer.previousTicks;
+    physicsTimer.previousTicks = physicsTimer.currentTicks;
+    physicsTimer.ticksPerSecond = SDL_GetPerformanceFrequency();
+    physicsTimer.deltaTime = (double) delta / (double) physicsTimer.ticksPerSecond;
 }
 
 void quit() {
@@ -37,22 +47,25 @@ int main(void) {
     SDL_Event event;
 
     while(1) {
-        tick();
+        gameTick();
+        physicsTick();
         player.loc_x = 200;
         player.loc_y = 250;
-
+        
         while(currentGameState == MENU) {
-            tick();
-            // accumulated_seconds += game.elapsedSeconds;
-            // if (accumulated_seconds >= CYCLE_TIME) {
-                accumulated_seconds -= CYCLE_TIME;
+            gameTick();
+            accumulated_seconds += game.timer.deltaTime;
+
+            if (accumulated_seconds > CYCLE_TIME - FLT_EPSILON) {
+                accumulated_seconds += game.timer.deltaTime;
+                physicsTick();
                 renderMainMenu();
+                updateDuck();
                 checkSDLPollEventMenu(event);
                 SDL_RenderPresent(game.renderer);
-            // }
-            updateDuck();
-
-
+            } else {
+                SDL_Delay(1);
+            }
         }
 
         while(currentGameState == RUNNING) {

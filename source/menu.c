@@ -4,6 +4,7 @@ extern Game game;
 extern Player player;
 extern MenuButtons menu;
 extern Text menuText;
+extern Timer physicsTimer;
 extern enum gameState{MENU, RUNNING, SCORE, CLOSE} currentGameState;
 
 void renderMainMenu() {
@@ -71,8 +72,8 @@ void renderMainMenu() {
 
 void updateDuck() {
     checkCollision();
-    gravity(&player, game.elapsedSeconds);
-    updateXVelocity(&player, game.elapsedSeconds);
+    gravity(&player, physicsTimer.deltaTime);
+    updateXVelocity(&player, physicsTimer.deltaTime);
 }
 
 void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
@@ -82,7 +83,7 @@ void renderSprite(int x, int y, SDL_Texture* sprite, SDL_Rect* clip) {
 
 void checkCollision() {
     if (player.loc_y + player.size_y >= menu.menuPlatform.loc_y) {
-        player.velocity_y = -1200; // Jump
+        player.velocity_y = -600; // Jump
         player.frame = 1;
     } else {
         player.frame = 0;
@@ -90,10 +91,10 @@ void checkCollision() {
 }
 
 void checkSDLPollEventMenu(SDL_Event event) {
-    while (SDL_PollEvent(&event) != 0) {
+    if (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_QUIT) {
             currentGameState = CLOSE;
-            break;
+            
         }
         if (event.type == SDL_MOUSEMOTION || event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) {
             int x, y; // Mouse position

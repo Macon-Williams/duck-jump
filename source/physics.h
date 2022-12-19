@@ -1,4 +1,4 @@
 #include "common.h"
 
-void updateXVelocity(Player* player, float deltaTime);
-void gravity(Player* player, float deltaTime);
+void updateXVelocity(Player* player, double deltaTime);
+void gravity(Player* player, double deltaTime);
