@@ -1,16 +1,21 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-
 typedef struct {
     Uint64 previousTicks, currentTicks, ticksPerSecond;
     double deltaTime;
 } Timer;
 
 typedef struct {
+    TTF_Font *font;
+    SDL_Texture *text;
+} Text;
+
+typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Timer timer;
+    enum gameState {MENU, RUNNING, SCORE, CLOSE} gameState;
 } Game;
 
 typedef struct {
@@ -32,17 +37,13 @@ typedef struct {
 } Platform;
 
 typedef struct {
+    Text titleText;
     Button playButton;
     Button exitButton;
     Button scoreButton;
     Button optionButton;
     Platform menuPlatform;
-} MenuButtons;
-
-typedef struct {
-    TTF_Font *menuFont;
-    SDL_Texture *titleText;
-} Text;
+} Menu;
 
 typedef struct {
     SDL_Texture *duckSprite;
