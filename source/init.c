@@ -18,7 +18,7 @@ void initSDL() {
     }
 
     // Create a game renderer
-    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED);
+    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (!game.renderer) {
         printf("Failed to create renderer! SDL Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -60,7 +60,7 @@ void initTextures(Player* player, Menu* menu) {
 
     player->size_x = 64;
     player->size_y = 64;
-    player->loc_x = 200;
+    player->loc_x = 150;
     player->loc_y = 250;
     player->velocity_x = 0;
     player->velocity_y = 0;
@@ -83,7 +83,7 @@ void initTextures(Player* player, Menu* menu) {
     menu->menuPlatform.sprite = loadTexture(PLATFORM_SPRITE_PATH);
     menu->menuPlatform.loc_y = 500;
     menu->menuPlatform.size_x = 128;
-    menu->menuPlatform.size_y = 32;
+    menu->menuPlatform.size_y = 24;
 }
 
 SDL_Texture *generateText(char* text, SDL_Color textColor, TTF_Font* font) {
@@ -108,7 +108,7 @@ void initFont(Text* text) {
     }
 }
 
-void initButtons(Menu* menu, TTF_Font* font) {
+void initMenuButtons(Menu* menu, TTF_Font* font) {
     SDL_Color textColor = {0, 0, 0};
 
     // Generate text images

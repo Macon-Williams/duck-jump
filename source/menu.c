@@ -58,12 +58,13 @@ void renderMainMenu(Menu* menu, Player player) {
     SDL_Rect exitTextRenderQuad = {menu->exitButton.text_loc_x, menu->exitButton.text_loc_y, menu->exitButton.text_size_x, menu->exitButton.text_size_y};
     SDL_RenderCopy(game.renderer, menu->exitButton.buttonText, NULL, &exitTextRenderQuad);
 
-    SDL_Rect menuPlatformRenderQuad = {(player.loc_x - player.size_x / 2), menu->menuPlatform.loc_y, menu->menuPlatform.size_x, menu->menuPlatform.size_y};
+    menu->menuPlatform.loc_x = (player.loc_x - player.size_x / 2);
+    SDL_Rect menuPlatformRenderQuad = {menu->menuPlatform.loc_x, menu->menuPlatform.loc_y, menu->menuPlatform.size_x, menu->menuPlatform.size_y};
     SDL_RenderCopy(game.renderer, menu->menuPlatform.sprite, NULL, &menuPlatformRenderQuad);
 }
 
 void checkSDLPollEventMenu(SDL_Event event, Menu* menu, Player* player) {
-    if (SDL_PollEvent(&event) != 0) {
+    while (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_QUIT) {
             game.gameState = CLOSE;
             
@@ -121,28 +122,16 @@ void checkSDLPollEventMenu(SDL_Event event, Menu* menu, Player* player) {
                 menu->exitButton.state = MOUSE_OUT;
             }
         }
-        if (event.type == SDL_KEYDOWN) {
-            switch(event.key.keysym.sym) {
-                case SDLK_RIGHT:
-                    player->move_x = 1;
-                    break;
-                case SDLK_LEFT:
-                    player->move_x = -1;
-                    break;
-                default:
-                    break;
-            }
+
+        const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+        if (keyboardState[SDL_SCANCODE_RIGHT] | keyboardState[SDL_SCANCODE_D]) {
+            player->move_x = 1;
         }
-        if (event.type == SDL_KEYUP) {
-            switch(event.key.keysym.sym) {
-                case SDLK_RIGHT:
-                // Fall through
-                case SDLK_LEFT:
-                    player->move_x = 0;
-                    break;
-                default:
-                    break;
-            }
+        if (keyboardState[SDL_SCANCODE_LEFT] | keyboardState[SDL_SCANCODE_A]) {
+            player->move_x = -1;
+        }
+        if (!keyboardState[SDL_SCANCODE_LEFT] && !keyboardState[SDL_SCANCODE_D] && !keyboardState[SDL_SCANCODE_RIGHT] && !keyboardState[SDL_SCANCODE_A]) {
+            player->move_x = 0;
         }
     }
 }

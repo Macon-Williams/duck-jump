@@ -49,6 +49,7 @@ typedef struct {
     SDL_Texture *duckSprite;
     SDL_Rect duckClip[2];
     int frame;
+    int score;
     double loc_x, loc_y;
     int size_x, size_y;
     double velocity_x, velocity_y;

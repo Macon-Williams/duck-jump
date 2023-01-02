@@ -22,35 +22,25 @@ int main(void) {
     initSDL();
     initFont(&menu.titleText);
     initTextures(&player, &menu);
-    initButtons(&menu, menu.titleText.font);
+    initMenuButtons(&menu, menu.titleText.font);
 
     float accumulated_seconds = 0.0f;
     game.gameState = MENU;
 
     while(1) {
-        tick(&gameTimer);       // Start the first game tick
         tick(&physicsTimer);    // Start the first physics tick
         
         while(game.gameState == MENU) {
-            tick(&gameTimer);
-            accumulated_seconds += gameTimer.deltaTime;
-
-            if (accumulated_seconds >= CYCLE_TIME - FLT_EPSILON) {
-                accumulated_seconds = 0;
-                checkSDLPollEventMenu(event, &menu, &player);
-                tick(&physicsTimer);
-                updateDuck(&player, &physicsTimer, &menu);
-                renderMainMenu(&menu, player);
-                renderPlayerSprite(&player);
-                SDL_RenderPresent(game.renderer);
-                //SDL_Delay(5);
-            // } else {
-            //     SDL_Delay((CYCLE_TIME - FLT_EPSILON - accumulated_seconds) * 1000);
-            }
+            checkSDLPollEventMenu(event, &menu, &player);       // Check for events
+            tick(&physicsTimer);                                // Tick the physics timer
+            updateDuck(&player, &physicsTimer, &menu, true);   // Update the duck position on the screen
+            renderMainMenu(&menu, player);                      // Render the main menu buttons & text
+            renderPlayerSprite(&player);                        // Render the duck sprite
+            SDL_RenderPresent(game.renderer);                   // Present the updated render to the screen
         }
 
         while(game.gameState == RUNNING) {
-
+            
         }
 
         while(game.gameState == SCORE) {
