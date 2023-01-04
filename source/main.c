@@ -2,6 +2,7 @@
 #include "init.h"
 #include "player.h"
 #include "menu.h"
+#include "game.h"
 
 Game game;
 
@@ -31,16 +32,22 @@ int main(void) {
         tick(&physicsTimer);    // Start the first physics tick
         
         while(game.gameState == MENU) {
-            checkSDLPollEventMenu(event, &menu, &player);       // Check for events
-            tick(&physicsTimer);                                // Tick the physics timer
-            updateDuck(&player, &physicsTimer, &menu, true);   // Update the duck position on the screen
-            renderMainMenu(&menu, player);                      // Render the main menu buttons & text
-            renderPlayerSprite(&player);                        // Render the duck sprite
-            SDL_RenderPresent(game.renderer);                   // Present the updated render to the screen
+            // int numOfPlatforms = sizeof(platform) / sizeof(*Platform);
+
+            checkSDLPollEventMenu(event, &menu, &player);                       // Check for events
+            tick(&physicsTimer);                                                // Tick the physics timer
+            moveDuck(&player, &physicsTimer, true);      // Update the duck position on the screen & check for collisions
+            checkNearPlatform(&player, &menu.menuPlatform);
+            checkCollision(&player, &menu.menuPlatform);
+            renderMainMenu(&menu, player);                                      // Render the main menu buttons & text
+            renderPlayerSprite(&player);                                        // Render the duck sprite
+            SDL_RenderPresent(game.renderer);                                   // Present the updated render to the screen
         }
 
         while(game.gameState == RUNNING) {
-            
+            checkSDLPollEventGame(event, &player);
+            tick(&physicsTimer);
+            //updateDuck(&player, &physicsTimer, &platform);
         }
 
         while(game.gameState == SCORE) {

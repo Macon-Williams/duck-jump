@@ -2,9 +2,7 @@
 
 extern Game game;
 
-void updateDuck(Player* player, Timer* timer, Menu* menu, bool moveable) {
-    checkNearPlatform(player, menu->menuPlatform.loc_x, menu->menuPlatform.size_x, menu->menuPlatform.loc_y);
-    checkCollision(player, menu);
+void moveDuck(Player* player, Timer* timer, bool moveable) {
     gravity(player, (double) timer->deltaTime);
     if (moveable)
         updateXVelocity(player, (double) timer->deltaTime);
@@ -15,9 +13,9 @@ void renderPlayerSprite(Player* player) {
     SDL_RenderCopy(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad);
 }
 
-void checkNearPlatform(Player* player, int loc_x, int size_x, int loc_y) {
-    if (player->loc_x > loc_x && player->loc_x < (loc_x + size_x)) {
-        if (player->loc_y + player->size_y >= loc_y - 40) {
+void checkNearPlatform(Player* player, Platform* platform) {
+    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
+        if (player->loc_y + player->size_y >= platform->loc_y - 50) { // 50 pixels away from the platform, switch to frame 2
             player->frame = 1;
         } else {
             player->frame = 0;
@@ -27,9 +25,11 @@ void checkNearPlatform(Player* player, int loc_x, int size_x, int loc_y) {
     }
 }
 
-void checkCollision(Player* player, Menu* menu) {
-    if (player->loc_y + player->size_y >= menu->menuPlatform.loc_y)
-        player->velocity_y = -600; // Jump
+void checkCollision(Player* player, Platform* platform) {
+    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
+        if (player->loc_y + player->size_y >= platform->loc_y)
+            player->velocity_y = -(JUMP_HEIGHT); // Jump
+    }
 }
 
 // TODO: Need better X movement for duck
