@@ -2,7 +2,7 @@
 
 extern Game game;
 
-void renderMainMenu(Menu* menu, Player player) {
+void renderMainMenu(Menu* menu, Player player, PlatformTexture* pTextures) {
     // Handles the main menu rendering
     SDL_SetRenderDrawColor(game.renderer, 0xC7, 0xC7, 0xC7, 0xFF);
     SDL_RenderClear(game.renderer);
@@ -60,11 +60,30 @@ void renderMainMenu(Menu* menu, Player player) {
 
     menu->menuPlatform.loc_x = (player.loc_x - player.size_x / 2);
     SDL_Rect menuPlatformRenderQuad = {menu->menuPlatform.loc_x, menu->menuPlatform.loc_y, menu->menuPlatform.size_x, menu->menuPlatform.size_y};
-    SDL_RenderCopy(game.renderer, menu->menuPlatform.sprite, NULL, &menuPlatformRenderQuad);
+    SDL_RenderCopy(game.renderer, pTextures->defaultTexture, NULL, &menuPlatformRenderQuad);
+}
+
+void checkNearMenuPlatform(Player* player, Platform* platform) {
+    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
+        if (player->loc_y + player->size_y >= platform->loc_y - 50) { // 50 pixels away from the platform, switch to frame 2
+            player->frame = 1;
+        } else {
+            player->frame = 0;
+        }
+    } else {
+        player->frame = 0;
+    }
+}
+
+void checkMenuCollision(Player* player, Platform* platform) {
+    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
+        if (player->loc_y + player->size_y >= platform->loc_y)
+            player->velocity_y = -(JUMP_HEIGHT); // Jump
+    }
 }
 
 void checkSDLPollEventMenu(SDL_Event event, Menu* menu, Player* player) {
-    while (SDL_PollEvent(&event) != 0) {
+    while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             game.gameState = CLOSE;
             
@@ -80,6 +99,7 @@ void checkSDLPollEventMenu(SDL_Event event, Menu* menu, Player* player) {
                     menu->playButton.state = MOUSE_DOWN;
                 } else if (event.type == SDL_MOUSEBUTTONUP) {
                     menu->playButton.state = MOUSE_OVER;
+                    game.gameState = RUNNING;
                 }
             } else {
                 menu->playButton.state = MOUSE_OUT;

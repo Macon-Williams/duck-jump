@@ -53,7 +53,7 @@ void initClip(SDL_Rect* tempClip, int numOfSprites, int spriteWidth, int spriteH
     }
 }
 
-void initTextures(Player* player, Menu* menu) {
+void initTextures(Player* player, Menu* menu, PlatformTexture* pTextures) {
     // Load the texture files
     player->duckSprite = loadTexture(PLAYER_SPRITE_PATH);
     initClip(player->duckClip, 2, 16, 16);
@@ -80,7 +80,8 @@ void initTextures(Player* player, Menu* menu) {
     menu->exitButton.buttonImage = loadTexture(BUTTON_SPRITE_PATH);
     initClip(menu->exitButton.buttonClip, 3, 96, 26);
 
-    menu->menuPlatform.sprite = loadTexture(PLATFORM_SPRITE_PATH);
+    pTextures->defaultTexture = loadTexture(PLATFORM_SPRITE_PATH);
+
     menu->menuPlatform.loc_y = 500;
     menu->menuPlatform.size_x = 128;
     menu->menuPlatform.size_y = 24;
@@ -96,6 +97,15 @@ SDL_Texture *generateText(char* text, SDL_Color textColor, TTF_Font* font) {
     SDL_Texture* tempMenuTextTexture = SDL_CreateTextureFromSurface(game.renderer, tempMenuTextSurface);
     SDL_FreeSurface(tempMenuTextSurface);
     return tempMenuTextTexture;
+}
+
+void initGameObjects(Platform* platform) {
+    for (int i = 0; i < MAX; i++) {
+        platform[i].size_x = *(int *) malloc(sizeof(int));
+        platform[i].size_y = *(int *) malloc(sizeof(int));
+        platform[i].loc_x = *(int *) malloc(sizeof(int));
+        platform[i].loc_y = *(int *) malloc(sizeof(int));
+    }
 }
 
 void initFont(Text* text) {
@@ -117,6 +127,9 @@ void initMenuButtons(Menu* menu, TTF_Font* font) {
     menu->scoreButton.buttonText = generateText("High Scores", textColor, font);
     menu->optionButton.buttonText = generateText("Options", textColor, font);
     menu->exitButton.buttonText = generateText("Exit", textColor, font);
+    game.loadingText = generateText("Loading...", textColor, font);
+    game.enterText = generateText("Press enter to start", textColor, font);
+
 
     // Set buttons in a MOUSE_OUT state
     menu->playButton.state = MOUSE_OUT;

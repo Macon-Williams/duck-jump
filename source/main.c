@@ -5,8 +5,7 @@
 #include "game.h"
 
 Game game;
-
-const float CYCLE_TIME = 1.0f / FRAME_RATE;
+//const float CYCLE_TIME = 1.0f / FRAME_RATE;
 
 void quit() {
     IMG_Quit();
@@ -19,10 +18,13 @@ int main(void) {
     Menu menu;
     Timer physicsTimer, gameTimer;
     SDL_Event event;
+    Platform platforms[MAX];
+    PlatformTexture pTextures;
 
     initSDL();
     initFont(&menu.titleText);
-    initTextures(&player, &menu);
+    initTextures(&player, &menu, &pTextures);
+    initGameObjects(&platforms);
     initMenuButtons(&menu, menu.titleText.font);
 
     float accumulated_seconds = 0.0f;
@@ -32,22 +34,26 @@ int main(void) {
         tick(&physicsTimer);    // Start the first physics tick
         
         while(game.gameState == MENU) {
-            // int numOfPlatforms = sizeof(platform) / sizeof(*Platform);
-
-            checkSDLPollEventMenu(event, &menu, &player);                       // Check for events
-            tick(&physicsTimer);                                                // Tick the physics timer
-            moveDuck(&player, &physicsTimer, true);      // Update the duck position on the screen & check for collisions
-            checkNearPlatform(&player, &menu.menuPlatform);
-            checkCollision(&player, &menu.menuPlatform);
-            renderMainMenu(&menu, player);                                      // Render the main menu buttons & text
-            renderPlayerSprite(&player);                                        // Render the duck sprite
-            SDL_RenderPresent(game.renderer);                                   // Present the updated render to the screen
+            checkSDLPollEventMenu(event, &menu, &player);                   // Check for events
+            tick(&physicsTimer);                                            // Tick the physics timer
+            moveDuck(&player, &physicsTimer, false);                        // Update the duck position on the screen & check for collisions
+            checkNearMenuPlatform(&player, &menu.menuPlatform);
+            checkMenuCollision(&player, &menu.menuPlatform);
+            renderMainMenu(&menu, player, &pTextures);                      // Render the main menu buttons & text
+            renderPlayerSprite(&player);                                    // Render the duck sprite
+            SDL_RenderPresent(game.renderer);                               // Present the updated render to the screen
         }
+
+        generatePlatforms(0, &platforms);
 
         while(game.gameState == RUNNING) {
             checkSDLPollEventGame(event, &player);
             tick(&physicsTimer);
-            //updateDuck(&player, &physicsTimer, &platform);
+            moveDuck(&player, &physicsTimer, true);
+            checkNearPlatforms(&player, &platforms);
+            renderGame(&player, &platforms, &pTextures);
+            renderPlayerSprite(&player);
+            SDL_RenderPresent(game.renderer);
         }
 
         while(game.gameState == SCORE) {

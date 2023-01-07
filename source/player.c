@@ -13,42 +13,22 @@ void renderPlayerSprite(Player* player) {
     SDL_RenderCopy(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad);
 }
 
-void checkNearPlatform(Player* player, Platform* platform) {
-    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
-        if (player->loc_y + player->size_y >= platform->loc_y - 50) { // 50 pixels away from the platform, switch to frame 2
-            player->frame = 1;
-        } else {
-            player->frame = 0;
-        }
-    } else {
-        player->frame = 0;
-    }
-}
-
-void checkCollision(Player* player, Platform* platform) {
-    if (player->loc_x > platform->loc_x && player->loc_x < (platform->loc_x + platform->size_x)) {
-        if (player->loc_y + player->size_y >= platform->loc_y)
-            player->velocity_y = -(JUMP_HEIGHT); // Jump
-    }
-}
-
-// TODO: Need better X movement for duck
 void updateXVelocity(Player* player, double deltaTime) {
     double acceleration;
     if (player->move_x) {
-        acceleration = player->move_x * PLAYER_MOVEMENT_ACCELERAITON;
-        if (player->velocity_x < 500 || player->velocity_x > 500) {
-
-            player->loc_x = player->loc_x + 300 * player->move_x * deltaTime + player->velocity_x * deltaTime + 0.5f * acceleration * deltaTime * deltaTime;
-            player->velocity_x = player->velocity_x + acceleration * deltaTime;
-        }
+        acceleration = PLAYER_MOVEMENT_ACCELERAITON * 5 * player->move_x;
     } else {
-        player->velocity_x = 0;
+        acceleration = -5 * player->velocity_x;
+        if (fabs(player->velocity_x) < 1) player->velocity_x = 0;
     }
-    
+
+    player->velocity_x += acceleration * deltaTime;
+    if (fabs(player->velocity_x) > MAX_PLAYER_SPEED) player->velocity_x = MAX_PLAYER_SPEED * player->move_x;
+    player->loc_x += player->velocity_x * deltaTime;
 }
 
 void gravity(Player* player, double deltaTime) {
-    player->loc_y = player->loc_y + player->velocity_y * deltaTime + 0.5f * GRAVITY * deltaTime * deltaTime;
-    player->velocity_y = player->velocity_y + GRAVITY * deltaTime;
+    //printf("Player gravity: %f\n delta time: %lf\nPlayer location: %lf", player->velocity_y, deltaTime, player->loc_y);
+    player->velocity_y += (GRAVITY * deltaTime);
+    player->loc_y += (player->velocity_y * deltaTime);
 }

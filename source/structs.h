@@ -14,6 +14,8 @@ typedef struct {
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    SDL_Texture *loadingText;
+    SDL_Texture *enterText;
     Timer timer;
     enum gameState {MENU, RUNNING, SCORE, CLOSE} gameState;
 } Game;
@@ -30,11 +32,14 @@ typedef struct {
 } Button;
 
 typedef struct {
-    SDL_Texture *sprite;
     int loc_x, loc_y;
     int size_x, size_y;
     int bounce_value;
 } Platform;
+
+typedef struct {
+    SDL_Texture *defaultTexture;
+} PlatformTexture;
 
 typedef struct {
     Text titleText;
