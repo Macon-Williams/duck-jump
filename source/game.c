@@ -7,18 +7,8 @@ void updateScore(Player *player) {
 
 void checkNearPlatforms(Player* player, Platform* platforms) {
     for (int i = 0; i < MAX; i++) {
-        if (player->loc_x + player->size_x > platforms[i].loc_x && player->loc_x < (platforms[i].loc_x + platforms[i].size_x)) {
-            if (player->loc_y + player->size_y >= platforms[i].loc_y - 50 && player->velocity_y > 0) { // 50 pixels away from the platform, switch to frame 2, player is near
-                player->frame = 1;
-                if (collision(player, &platforms[i])) {
-                    player->velocity_y = -JUMP_HEIGHT; // Jump
-                }
-            } else {
-                player->frame = 0;
-            }
-        } else {
-        player->frame = 0;
-        }
+        if (collision(player, &platforms[i]))
+            player->velocity_y = -JUMP_HEIGHT; // Jump
     }
 }
 
@@ -46,17 +36,16 @@ void generatePlatforms(int offset, Platform* platform, int numOfPlatforms) {
             platform[i].size_y = 24;
             default_space +=48;
         }
-
     }
 }
 
 // TODO: Implement
-void renderGame(Player* player, Platform* platform, PlatformTexture* pTextures) {
+void renderGame(Platform* platform, PlatformTexture* pTextures, SDL_Rect* camera) {
     SDL_SetRenderDrawColor(game.renderer, 0xC7, 0xC7, 0xC7, 0xFF);
     SDL_RenderClear(game.renderer);
 
     for (int i = 0; i < MAX; i++) {
-        SDL_Rect platformQuad = {platform[i].loc_x, platform[i].loc_y, platform[i].size_x, platform[i].size_y};
+        SDL_Rect platformQuad = {platform[i].loc_x, platform[i].loc_y - camera->y, platform[i].size_x, platform[i].size_y};
         SDL_RenderCopy(game.renderer, pTextures->defaultTexture, NULL, &platformQuad);
     }
 }
@@ -77,11 +66,13 @@ void checkSDLPollEventGame(SDL_Event event, Player* player) {
         }
 
         const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
-        if (keyboardState[SDL_SCANCODE_RIGHT] | keyboardState[SDL_SCANCODE_D]) {
+        if (keyboardState[SDL_SCANCODE_RIGHT] || keyboardState[SDL_SCANCODE_D]) {
             player->move_x = 1;
+            player->flipped = false;
         }
-        if (keyboardState[SDL_SCANCODE_LEFT] | keyboardState[SDL_SCANCODE_A]) {
+        if (keyboardState[SDL_SCANCODE_LEFT] || keyboardState[SDL_SCANCODE_A]) {
             player->move_x = -1;
+            player->flipped = true;
         }
         if (!keyboardState[SDL_SCANCODE_LEFT] && !keyboardState[SDL_SCANCODE_D] && !keyboardState[SDL_SCANCODE_RIGHT] && !keyboardState[SDL_SCANCODE_A]) {
             player->move_x = 0;

@@ -8,9 +8,9 @@ void moveDuck(Player* player, Timer* timer, bool moveable) {
         updateXVelocity(player, (double) timer->deltaTime);
 }
 
-void renderPlayerSprite(Player* player) {
-    SDL_Rect renderQuad = {(int) player->loc_x, (int) player->loc_y, player->size_x, player->size_y};
-    if (player->velocity_x < 0 | player->move_x < 0) {
+void renderPlayerSprite(Player* player, SDL_Rect* camera) {
+    SDL_Rect renderQuad = {(int) player->loc_x, (int) player->loc_y - camera->y, player->size_x, player->size_y};
+    if (player->flipped) {
         SDL_RenderCopyEx(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad, 0, NULL, SDL_FLIP_HORIZONTAL);
     } else {
         SDL_RenderCopyEx(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad, 0, NULL, 0);
@@ -39,7 +39,11 @@ void updateXVelocity(Player* player, double deltaTime) {
 }
 
 void gravity(Player* player, double deltaTime) {
-    //printf("Player gravity: %f\n delta time: %lf\nPlayer location: %lf", player->velocity_y, deltaTime, player->loc_y);
     player->velocity_y += (GRAVITY * deltaTime);
     player->loc_y += (player->velocity_y * deltaTime);
+    if (player->velocity_y > 0) {
+        player->frame = 1;      
+    } else {
+        player->frame = 0;
+    }
 }

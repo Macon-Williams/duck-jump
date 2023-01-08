@@ -20,6 +20,7 @@ int main(void) {
     SDL_Event event;
     Platform platforms[MAX];
     PlatformTexture pTextures;
+    SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     initSDL();
     initFont(&menu.titleText);
@@ -40,7 +41,7 @@ int main(void) {
             checkNearMenuPlatform(&player, &menu.menuPlatform);
             checkMenuCollision(&player, &menu.menuPlatform);
             renderMainMenu(&menu, player, &pTextures);                      // Render the main menu buttons & text
-            renderPlayerSprite(&player);                                    // Render the duck sprite
+            renderPlayerSprite(&player, &camera);                                    // Render the duck sprite
             SDL_RenderPresent(game.renderer);                               // Present the updated render to the screen
         }
 
@@ -51,8 +52,9 @@ int main(void) {
             tick(&physicsTimer);
             moveDuck(&player, &physicsTimer, true);
             checkNearPlatforms(&player, &platforms);
-            renderGame(&player, &platforms, &pTextures);
-            renderPlayerSprite(&player);
+            camera.y = (player.loc_y + player.size_y / 2) - SCREEN_HEIGHT / 2;
+            renderGame(&platforms, &pTextures, &camera);
+            renderPlayerSprite(&player, &camera);
             SDL_RenderPresent(game.renderer);
         }
 

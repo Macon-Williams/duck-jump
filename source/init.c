@@ -67,6 +67,8 @@ void initTextures(Player* player, Menu* menu, PlatformTexture* pTextures) {
     player->move_x = 0;
     player->move_y = 0;
     player->frame = 0;
+    player->score = 0;
+    player->flipped = false;
 
     menu->playButton.buttonImage = loadTexture(PLAY_BUTTON_SPRITE_PATH);
     initClip(menu->playButton.buttonClip, 3, 108, 44);

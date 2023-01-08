@@ -61,6 +61,7 @@ typedef struct {
     double velocity_x, velocity_y;
     int move_x, move_y;
     char name[10];
+    bool flipped;
 } Player;
 
 #endif
