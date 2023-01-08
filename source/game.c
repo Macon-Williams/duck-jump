@@ -7,7 +7,7 @@ void updateScore(Player *player) {
 
 void checkNearPlatforms(Player* player, Platform* platforms) {
     for (int i = 0; i < MAX; i++) {
-        if (player->loc_x > platforms[i].loc_x && player->loc_x < (platforms[i].loc_x + platforms[i].size_x)) {
+        if (player->loc_x + player->size_x > platforms[i].loc_x && player->loc_x < (platforms[i].loc_x + platforms[i].size_x)) {
             if (player->loc_y + player->size_y >= platforms[i].loc_y - 50 && player->velocity_y > 0) { // 50 pixels away from the platform, switch to frame 2, player is near
                 player->frame = 1;
                 if (collision(player, &platforms[i])) {
@@ -23,7 +23,7 @@ void checkNearPlatforms(Player* player, Platform* platforms) {
 }
 
 bool collision(Player* player, Platform* platform) {
-    if (player->loc_x > platform->loc_x && player->loc_x < platform->loc_x + platform->size_x) {
+    if (player->loc_x + player->size_x > platform->loc_x && player->loc_x < platform->loc_x + platform->size_x) {
         if ((player->loc_y + player->size_y >= platform->loc_y) && (player->loc_y + player->size_y < platform->loc_y + platform->size_y) && player->velocity_y > 0){
             return true;
         }
@@ -31,13 +31,22 @@ bool collision(Player* player, Platform* platform) {
     return false;
 }
 
-// TODO: Implement
-void generatePlatforms(int score, Platform* platform) {
-    for (int i = 0; i < MAX; i++) {
-        platform[i].loc_x = (rand() % (SCREEN_WIDTH - 128));
-        platform[i].loc_y = (rand() % (SCREEN_HEIGHT - 24));
-        platform[i].size_x = 128;
-        platform[i].size_y = 24;
+void generatePlatforms(int offset, Platform* platform, int numOfPlatforms) {
+    int default_space = 48;
+    double y_spacing = (double) offset * (double) 0.001f;
+    if (y_spacing > 300.0) {
+        y_spacing = 300.0;
+    }
+
+    for (int i = 0; i < numOfPlatforms; i++) {
+        if (platform[i].off_screen) {
+            platform[i].loc_x = (rand() % (SCREEN_WIDTH - 128));
+            platform[i].loc_y = SCREEN_HEIGHT - (y_spacing + default_space);
+            platform[i].size_x = 128;
+            platform[i].size_y = 24;
+            default_space +=48;
+        }
+
     }
 }
 

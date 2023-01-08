@@ -105,6 +105,7 @@ void initGameObjects(Platform* platform) {
         platform[i].size_y = *(int *) malloc(sizeof(int));
         platform[i].loc_x = *(int *) malloc(sizeof(int));
         platform[i].loc_y = *(int *) malloc(sizeof(int));
+        platform[i].off_screen = true;
     }
 }
 

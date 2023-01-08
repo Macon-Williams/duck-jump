@@ -44,7 +44,7 @@ int main(void) {
             SDL_RenderPresent(game.renderer);                               // Present the updated render to the screen
         }
 
-        generatePlatforms(0, &platforms);
+        generatePlatforms(0, &platforms, MAX);
 
         while(game.gameState == RUNNING) {
             checkSDLPollEventGame(event, &player);

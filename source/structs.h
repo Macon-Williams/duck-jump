@@ -35,6 +35,7 @@ typedef struct {
     int loc_x, loc_y;
     int size_x, size_y;
     int bounce_value;
+    bool off_screen;
 } Platform;
 
 typedef struct {

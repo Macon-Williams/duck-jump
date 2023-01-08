@@ -14,7 +14,7 @@
 #define BUTTON_SIZE_X 192
 #define BUTTON_SIZE_Y 52
 
-#define MAX 20
+#define MAX 30
 
 #define GRAVITY 980
 #define PLAYER_MOVEMENT_ACCELERAITON 700

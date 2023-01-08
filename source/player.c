@@ -10,7 +10,11 @@ void moveDuck(Player* player, Timer* timer, bool moveable) {
 
 void renderPlayerSprite(Player* player) {
     SDL_Rect renderQuad = {(int) player->loc_x, (int) player->loc_y, player->size_x, player->size_y};
-    SDL_RenderCopy(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad);
+    if (player->velocity_x < 0 | player->move_x < 0) {
+        SDL_RenderCopyEx(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad, 0, NULL, SDL_FLIP_HORIZONTAL);
+    } else {
+        SDL_RenderCopyEx(game.renderer, player->duckSprite, &player->duckClip[player->frame], &renderQuad, 0, NULL, 0);
+    }
 }
 
 void updateXVelocity(Player* player, double deltaTime) {
@@ -22,7 +26,14 @@ void updateXVelocity(Player* player, double deltaTime) {
         if (fabs(player->velocity_x) < 1) player->velocity_x = 0;
     }
 
-    player->velocity_x += acceleration * deltaTime;
+    if (player->loc_x + player->size_x >= SCREEN_WIDTH && player->move_x > 0) {
+        player->velocity_x = 0;
+    } else if (player->loc_x <= 0 && player->move_x < 0) {
+        player->velocity_x = 0;
+    } else {
+        player->velocity_x += acceleration * deltaTime;
+    }
+
     if (fabs(player->velocity_x) > MAX_PLAYER_SPEED) player->velocity_x = MAX_PLAYER_SPEED * player->move_x;
     player->loc_x += player->velocity_x * deltaTime;
 }
