@@ -69,6 +69,7 @@ void initTextures(Player* player, Menu* menu, PlatformTexture* pTextures) {
     player->frame = 0;
     player->score = 0;
     player->flipped = false;
+    player->lost = false;
 
     menu->playButton.buttonImage = loadTexture(PLAY_BUTTON_SPRITE_PATH);
     initClip(menu->playButton.buttonClip, 3, 108, 44);
@@ -132,6 +133,7 @@ void initMenuButtons(Menu* menu, TTF_Font* font) {
     menu->exitButton.buttonText = generateText("Exit", textColor, font);
     game.loadingText = generateText("Loading...", textColor, font);
     game.enterText = generateText("Press enter to start", textColor, font);
+    game.lostText = generateText("Game over!", textColor, font);
 
 
     // Set buttons in a MOUSE_OUT state

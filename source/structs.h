@@ -16,6 +16,7 @@ typedef struct {
     SDL_Renderer *renderer;
     SDL_Texture *loadingText;
     SDL_Texture *enterText;
+    SDL_Texture *lostText;
     Timer timer;
     enum gameState {MENU, RUNNING, SCORE, CLOSE} gameState;
 } Game;
@@ -62,6 +63,7 @@ typedef struct {
     int move_x, move_y;
     char name[10];
     bool flipped;
+    bool lost;
 } Player;
 
 #endif

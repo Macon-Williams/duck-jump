@@ -5,7 +5,6 @@
 #include "game.h"
 
 Game game;
-//const float CYCLE_TIME = 1.0f / FRAME_RATE;
 
 void quit() {
     IMG_Quit();
@@ -22,13 +21,14 @@ int main(void) {
     PlatformTexture pTextures;
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
+    int offset = PLATFORM_OFFSET;
+
     initSDL();
     initFont(&menu.titleText);
     initTextures(&player, &menu, &pTextures);
     initGameObjects(&platforms);
     initMenuButtons(&menu, menu.titleText.font);
 
-    float accumulated_seconds = 0.0f;
     game.gameState = MENU;
 
     while(1) {
@@ -41,21 +41,24 @@ int main(void) {
             checkNearMenuPlatform(&player, &menu.menuPlatform);
             checkMenuCollision(&player, &menu.menuPlatform);
             renderMainMenu(&menu, player, &pTextures);                      // Render the main menu buttons & text
-            renderPlayerSprite(&player, &camera);                                    // Render the duck sprite
+            renderPlayerSprite(&player, &camera);                           // Render the duck sprite
             SDL_RenderPresent(game.renderer);                               // Present the updated render to the screen
         }
 
-        generatePlatforms(0, &platforms, MAX);
+        generatePlatforms(&camera, 0, &offset, &platforms, MAX);
+        player.lost = false;
 
         while(game.gameState == RUNNING) {
             checkSDLPollEventGame(event, &player);
             tick(&physicsTimer);
             moveDuck(&player, &physicsTimer, true);
             checkNearPlatforms(&player, &platforms);
-            camera.y = (player.loc_y + player.size_y / 2) - SCREEN_HEIGHT / 2;
+            moveCamera(&camera, &player);
+            generatePlatforms(&camera, player.score, &offset, &platforms, MAX);
             renderGame(&platforms, &pTextures, &camera);
             renderPlayerSprite(&player, &camera);
             SDL_RenderPresent(game.renderer);
+            if (player.lost) game.gameState = CLOSE;
         }
 
         while(game.gameState == SCORE) {

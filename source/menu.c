@@ -23,7 +23,7 @@ void renderMainMenu(Menu* menu, Player player, PlatformTexture* pTextures) {
     SDL_RenderCopy(game.renderer, menu->playButton.buttonText, NULL, &playTextRenderQuad);
 
     SDL_Rect scoreButtonRenderQuad = {menu->scoreButton.loc_x, menu->scoreButton.loc_y, menu->scoreButton.size_x, menu->scoreButton.size_y};
-    SDL_RenderCopy(game.renderer, menu->scoreButton.buttonImage, &menu->scoreButton.buttonClip[menu->scoreButton.state], &scoreButtonRenderQuad); // I cause a segmentation fault
+    SDL_RenderCopy(game.renderer, menu->scoreButton.buttonImage, &menu->scoreButton.buttonClip[menu->scoreButton.state], &scoreButtonRenderQuad);
     if (menu->scoreButton.state == MOUSE_DOWN) {
         menu->scoreButton.text_loc_x = menu->scoreButton.loc_x + (menu->scoreButton.size_x - menu->scoreButton.text_size_x) / 2 - 4;
         menu->scoreButton.text_loc_y = menu->scoreButton.loc_y + (menu->scoreButton.size_y - menu->scoreButton.text_size_y) / 2 + 4;

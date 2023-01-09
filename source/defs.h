@@ -14,7 +14,8 @@
 #define BUTTON_SIZE_X 192
 #define BUTTON_SIZE_Y 52
 
-#define MAX 30
+#define MAX 20
+#define PLATFORM_OFFSET 48
 
 #define GRAVITY 980
 #define PLAYER_MOVEMENT_ACCELERAITON 700

@@ -21,20 +21,28 @@ bool collision(Player* player, Platform* platform) {
     return false;
 }
 
-void generatePlatforms(int offset, Platform* platform, int numOfPlatforms) {
-    int default_space = 48;
-    double y_spacing = (double) offset * (double) 0.001f;
-    if (y_spacing > 300.0) {
-        y_spacing = 300.0;
+void generatePlatforms(SDL_Rect* camera, int score, int* offset, Platform* platform, int numOfPlatforms) {
+    float spacing;
+    for (int i = 0; i < numOfPlatforms; i++) {
+        if (platform[i].loc_y > camera->y + SCREEN_HEIGHT + 20) {
+            platform[i].off_screen = true;
+        }
     }
 
     for (int i = 0; i < numOfPlatforms; i++) {
+        spacing = (float) score / 20 + 1;
+        if (spacing > 160.0) {
+            spacing = 160.0;
+        }
+
         if (platform[i].off_screen) {
             platform[i].loc_x = (rand() % (SCREEN_WIDTH - 128));
-            platform[i].loc_y = SCREEN_HEIGHT - (y_spacing + default_space);
+            platform[i].loc_y = SCREEN_HEIGHT - *offset;
             platform[i].size_x = 128;
             platform[i].size_y = 24;
-            default_space +=48;
+            platform[i].off_screen = false;        
+            *offset += 48 + (rand() % (int) spacing);
+
         }
     }
 }
