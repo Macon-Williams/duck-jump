@@ -1,20 +1,30 @@
 #include "game.h"
 
-// TODO: Implement
-void updateScore(Player *player) {
-
-}
-
-void checkNearPlatforms(Player* player, Platform* platforms) {
-    for (int i = 0; i < MAX; i++) {
-        if (collision(player, &platforms[i]))
-            player->velocity_y = -JUMP_HEIGHT; // Jump
+void initPlatforms(Platform* platform, int numOfPlatforms) {
+    for (int i = 0; i < numOfPlatforms; i++) {
+        platform[i].size_x = *(int *) malloc(sizeof(int));
+        platform[i].size_y = *(int *) malloc(sizeof(int));
+        platform[i].loc_x = *(int *) malloc(sizeof(int));
+        platform[i].loc_y = *(int *) malloc(sizeof(int));
+        platform[i].off_screen = true;
     }
 }
 
-bool collision(Player* player, Platform* platform) {
-    if (player->loc_x + player->size_x > platform->loc_x && player->loc_x < platform->loc_x + platform->size_x) {
-        if ((player->loc_y + player->size_y >= platform->loc_y) && (player->loc_y + player->size_y < platform->loc_y + platform->size_y) && player->velocity_y > 0){
+// TODO: Implement
+void updateScore() {
+
+}
+
+void checkNearPlatforms(Platform* platforms) {
+    for (int i = 0; i < MAX; i++) {
+        if (collision(&platforms[i]))
+            player.velocity_y = -JUMP_HEIGHT; // Jump
+    }
+}
+
+bool collision(Platform* platform) {
+    if (player.loc_x + player.size_x > platform->loc_x && player.loc_x < platform->loc_x + platform->size_x) {
+        if ((player.loc_y + player.size_y >= platform->loc_y) && (player.loc_y + player.size_y < platform->loc_y + platform->size_y) && player.velocity_y > 0){
             return true;
         }
     }
@@ -41,7 +51,7 @@ void generatePlatforms(SDL_Rect* camera, int score, int* offset, Platform* platf
             platform[i].size_x = 128;
             platform[i].size_y = 24;
             platform[i].off_screen = false;        
-            *offset += 48 + (rand() % (int) spacing);
+            *offset += PLATFORM_OFFSET + (rand() % (int) spacing);
 
         }
     }
@@ -67,7 +77,7 @@ void load() {
 }
 
 // TODO: Implement
-void checkSDLPollEventGame(SDL_Event event, Player* player) {
+void checkSDLPollEventGame(SDL_Event event) {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             game.gameState = CLOSE;
@@ -75,15 +85,15 @@ void checkSDLPollEventGame(SDL_Event event, Player* player) {
 
         const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
         if (keyboardState[SDL_SCANCODE_RIGHT] || keyboardState[SDL_SCANCODE_D]) {
-            player->move_x = 1;
-            player->flipped = false;
+            player.move_x = 1;
+            player.flipped = false;
         }
         if (keyboardState[SDL_SCANCODE_LEFT] || keyboardState[SDL_SCANCODE_A]) {
-            player->move_x = -1;
-            player->flipped = true;
+            player.move_x = -1;
+            player.flipped = true;
         }
         if (!keyboardState[SDL_SCANCODE_LEFT] && !keyboardState[SDL_SCANCODE_D] && !keyboardState[SDL_SCANCODE_RIGHT] && !keyboardState[SDL_SCANCODE_A]) {
-            player->move_x = 0;
+            player.move_x = 0;
         }
     }
 }

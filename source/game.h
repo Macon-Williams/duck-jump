@@ -1,11 +1,13 @@
 #include "common.h"
 
 extern Game game;
+extern Player player;
 
-void updateScore(Player* player);
-void checkNearPlatforms(Player* player, Platform* platforms);
-bool collision(Player* player, Platform* platform);
+void initPlatforms(Platform* platform, int numOfPlatforms);
+void updateScore();
+void checkNearPlatforms(Platform* platforms);
+bool collision(Platform* platform);
 void generatePlatforms(SDL_Rect* camera, int score, int* offset, Platform* platforms, int numOfPlatforms);
 void renderGame(Platform* platform, PlatformTexture* pTextures, SDL_Rect* camera);
 void load();
-void checkSDLPollEventGame(SDL_Event event, Player* player);
+void checkSDLPollEventGame(SDL_Event event);

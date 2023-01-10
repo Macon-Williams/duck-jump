@@ -1,7 +1,5 @@
 #include "init.h"
 
-extern Game game;
-
 void initSDL() {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -18,7 +16,7 @@ void initSDL() {
     }
 
     // Create a game renderer
-    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    game.renderer = SDL_CreateRenderer(game.window, -1, SDL_RENDERER_ACCELERATED || SDL_RENDERER_PRESENTVSYNC);
     if (!game.renderer) {
         printf("Failed to create renderer! SDL Error: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
@@ -53,24 +51,8 @@ void initClip(SDL_Rect* tempClip, int numOfSprites, int spriteWidth, int spriteH
     }
 }
 
-void initTextures(Player* player, Menu* menu, PlatformTexture* pTextures) {
+void initTextures(Menu* menu, PlatformTexture* pTextures) {
     // Load the texture files
-    player->duckSprite = loadTexture(PLAYER_SPRITE_PATH);
-    initClip(player->duckClip, 2, 16, 16);
-
-    player->size_x = 64;
-    player->size_y = 64;
-    player->loc_x = 150;
-    player->loc_y = 250;
-    player->velocity_x = 0;
-    player->velocity_y = 0;
-    player->move_x = 0;
-    player->move_y = 0;
-    player->frame = 0;
-    player->score = 0;
-    player->flipped = false;
-    player->lost = false;
-
     menu->playButton.buttonImage = loadTexture(PLAY_BUTTON_SPRITE_PATH);
     initClip(menu->playButton.buttonClip, 3, 108, 44);
 
@@ -100,16 +82,6 @@ SDL_Texture *generateText(char* text, SDL_Color textColor, TTF_Font* font) {
     SDL_Texture* tempMenuTextTexture = SDL_CreateTextureFromSurface(game.renderer, tempMenuTextSurface);
     SDL_FreeSurface(tempMenuTextSurface);
     return tempMenuTextTexture;
-}
-
-void initGameObjects(Platform* platform) {
-    for (int i = 0; i < MAX; i++) {
-        platform[i].size_x = *(int *) malloc(sizeof(int));
-        platform[i].size_y = *(int *) malloc(sizeof(int));
-        platform[i].loc_x = *(int *) malloc(sizeof(int));
-        platform[i].loc_y = *(int *) malloc(sizeof(int));
-        platform[i].off_screen = true;
-    }
 }
 
 void initFont(Text* text) {
