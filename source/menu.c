@@ -8,7 +8,7 @@ void renderMainMenu(Menu* menu, Player player, PlatformTexture* pTextures) {
     SDL_RenderClear(game.renderer);
 
     SDL_Rect textRenderQuad = {50, 50, 384, 64};
-    SDL_RenderCopy(game.renderer, menu->titleText.text, NULL, &textRenderQuad);
+    SDL_RenderCopy(game.renderer, menu->titleText, NULL, &textRenderQuad);
 
     SDL_Rect playButtonRenderQuad = {menu->playButton.loc_x, menu->playButton.loc_y, menu->playButton.size_x, menu->playButton.size_y};
     SDL_RenderCopy(game.renderer, menu->playButton.buttonImage, &menu->playButton.buttonClip[menu->playButton.state], &playButtonRenderQuad);

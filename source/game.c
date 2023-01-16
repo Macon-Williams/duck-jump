@@ -1,4 +1,5 @@
 #include "game.h"
+#include "init.h"
 
 void initPlatforms(Platform* platform, int numOfPlatforms) {
     for (int i = 0; i < numOfPlatforms; i++) {
@@ -10,8 +11,11 @@ void initPlatforms(Platform* platform, int numOfPlatforms) {
     }
 }
 
-// TODO: Implement
 void updateScore() {
+    SDL_Color textColor = {0, 0, 0};
+    char buffer[10];
+    sprintf(buffer, "%d", player.score);
+    player.scoreNumText = generateText(buffer, textColor);
 
 }
 
@@ -57,14 +61,32 @@ void generatePlatforms(SDL_Rect* camera, int score, int* offset, Platform* platf
     }
 }
 
-// TODO: Implement
 void renderGame(Platform* platform, PlatformTexture* pTextures, SDL_Rect* camera) {
     SDL_SetRenderDrawColor(game.renderer, 0xC7, 0xC7, 0xC7, 0xFF);
     SDL_RenderClear(game.renderer);
 
-    for (int i = 0; i < MAX; i++) {
-        SDL_Rect platformQuad = {platform[i].loc_x, platform[i].loc_y - camera->y, platform[i].size_x, platform[i].size_y};
-        SDL_RenderCopy(game.renderer, pTextures->defaultTexture, NULL, &platformQuad);
+    if (player.lost) {
+        SDL_Rect gameOverQuad = {(SCREEN_WIDTH - 400)/2, (SCREEN_HEIGHT - 200)/2 - 60, 400, 200};
+        SDL_RenderCopy(game.renderer, game.lostText, NULL, &gameOverQuad);
+
+        SDL_Rect scoreQuad = {(SCREEN_WIDTH - 150)/2, SCREEN_HEIGHT/2 + 10, 130, 70};
+        SDL_RenderCopy(game.renderer, game.scoreText, NULL, &scoreQuad);
+        SDL_Rect numScoreQuad = {(SCREEN_WIDTH - 130)/2 + 120, SCREEN_HEIGHT/2 + 10, 130, 70};
+        SDL_RenderCopy(game.renderer, player.scoreNumText, NULL, &numScoreQuad);
+    } else {
+        for (int i = 0; i < MAX; i++) {
+            SDL_Rect platformQuad = {platform[i].loc_x, platform[i].loc_y - camera->y, platform[i].size_x, platform[i].size_y};
+            SDL_RenderCopy(game.renderer, pTextures->defaultTexture, NULL, &platformQuad);
+        }
+
+        SDL_Rect scoreQuad = {20, 20, 120, 40};
+        SDL_RenderCopy(game.renderer, game.scoreText, NULL, &scoreQuad);
+
+        int width = 60;
+        if (player.score > 100) width = 80;
+        if (player.score > 1000) width = 100;
+        SDL_Rect numScoreQuad = {140, 20, width, 40};
+        SDL_RenderCopy(game.renderer, player.scoreNumText, NULL, &numScoreQuad);
     }
 }
 

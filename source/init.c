@@ -72,8 +72,8 @@ void initTextures(Menu* menu, PlatformTexture* pTextures) {
     menu->menuPlatform.size_y = 24;
 }
 
-SDL_Texture *generateText(char* text, SDL_Color textColor, TTF_Font* font) {
-    SDL_Surface* tempMenuTextSurface = TTF_RenderUTF8_Solid(font, text, textColor);
+SDL_Texture *generateText(char* text, SDL_Color textColor) {
+    SDL_Surface* tempMenuTextSurface = TTF_RenderUTF8_Solid(game.gameFont, text, textColor);
     if (!tempMenuTextSurface) {
         printf("Unable to render text: %s! SDL_ttf Error: %s\n", text, TTF_GetError());
         exit(EXIT_FAILURE);
@@ -84,28 +84,29 @@ SDL_Texture *generateText(char* text, SDL_Color textColor, TTF_Font* font) {
     return tempMenuTextTexture;
 }
 
-void initFont(Text* text) {
+void initFont() {
     // Initializes a font within a text object
     
-    text->font = TTF_OpenFont(FONT_PATH, 48);
-    if (!text->font) {
+    game.gameFont = TTF_OpenFont(FONT_PATH, 48);
+    if (!game.gameFont) {
         printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
 }
 
-void initMenuButtons(Menu* menu, TTF_Font* font) {
+void initMenuButtons(Menu* menu) {
     SDL_Color textColor = {0, 0, 0};
 
     // Generate text images
-    menu->titleText.text = generateText("Duck Jump", textColor, font);
-    menu->playButton.buttonText = generateText("Play", textColor, font);
-    menu->scoreButton.buttonText = generateText("High Scores", textColor, font);
-    menu->optionButton.buttonText = generateText("Options", textColor, font);
-    menu->exitButton.buttonText = generateText("Exit", textColor, font);
-    game.loadingText = generateText("Loading...", textColor, font);
-    game.enterText = generateText("Press enter to start", textColor, font);
-    game.lostText = generateText("Game over!", textColor, font);
+    menu->titleText = generateText("Duck Jump", textColor);
+    menu->playButton.buttonText = generateText("Play", textColor);
+    menu->scoreButton.buttonText = generateText("High Scores", textColor);
+    menu->optionButton.buttonText = generateText("Options", textColor);
+    menu->exitButton.buttonText = generateText("Exit", textColor);
+    game.scoreText = generateText ("Score: ", textColor);
+    game.loadingText = generateText("Loading...", textColor);
+    game.enterText = generateText("Press enter to start", textColor);
+    game.lostText = generateText("Game over!", textColor);
 
 
     // Set buttons in a MOUSE_OUT state

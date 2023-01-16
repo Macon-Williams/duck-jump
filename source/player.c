@@ -52,7 +52,7 @@ void renderPlayerSprite(SDL_Rect* camera) {
 // Handles X movement on screen
 /* I needed a way to smoothly move the character from side to side depending on keyboard input.
  * This method first calculates acceleration (taking into account which direction the acceleration is).
- * Afterwards it applies this acceleration to the velocity until the velocity becomes to high, then
+ * Afterwards it applies this acceleration to the velocity until the velocity becomes too high, then
  * the input is ignored.
 */ 
 void moveX(double deltaTime) {
@@ -64,16 +64,17 @@ void moveX(double deltaTime) {
         if (fabs(player.velocity_x) < 1) player.velocity_x = 0;
     }
 
-    if (player.loc_x + player.size_x >= SCREEN_WIDTH) {
-        player.velocity_x = -10;
-    } else if (player.loc_x <= 0) {
-        player.velocity_x = 10;
-    } else {
-        player.velocity_x += acceleration * deltaTime;
-    }
+    player.velocity_x += acceleration * deltaTime;
 
     if (fabs(player.velocity_x) > MAX_PLAYER_SPEED) player.velocity_x = MAX_PLAYER_SPEED * player.move_x;
     player.loc_x += player.velocity_x * deltaTime;
+
+    if (player.loc_x + player.size_x / 2 >= SCREEN_WIDTH) {
+        player.loc_x -= SCREEN_WIDTH;
+    } 
+    if (player.loc_x + player.size_x / 2 <= 0) {
+        player.loc_x += SCREEN_WIDTH;
+    } 
 }
 
 // Handles gravity input on screen

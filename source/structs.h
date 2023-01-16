@@ -7,16 +7,14 @@ typedef struct {
 } Timer;
 
 typedef struct {
-    TTF_Font *font;
-    SDL_Texture *text;
-} Text;
-
-typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     SDL_Texture *loadingText;
     SDL_Texture *enterText;
     SDL_Texture *lostText;
+    SDL_Texture *scoreText;
+    SDL_Texture *gameOverText;
+    TTF_Font *gameFont;
     Timer timer;
     enum gameState {MENU, RUNNING, SCORE, CLOSE} gameState;
 } Game;
@@ -44,7 +42,7 @@ typedef struct {
 } PlatformTexture;
 
 typedef struct {
-    Text titleText;
+    SDL_Texture *titleText;
     Button playButton;
     Button exitButton;
     Button scoreButton;
@@ -55,6 +53,7 @@ typedef struct {
 typedef struct {
     SDL_Texture *duckSprite;
     SDL_Rect duckClip[2];
+    SDL_Texture *scoreNumText;
     int frame;
     int score;
     double loc_x, loc_y;

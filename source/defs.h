@@ -2,7 +2,7 @@
 #define PLAY_BUTTON_SPRITE_PATH "../assets/PlayButton.png"
 #define BUTTON_SPRITE_PATH "../assets/Button.png"
 #define PLATFORM_SPRITE_PATH "../assets/Platform-new.png"
-#define FONT_PATH "../assets/StayPixelRegular.ttf"
+#define FONT_PATH "../assets/upheavtt.ttf"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600

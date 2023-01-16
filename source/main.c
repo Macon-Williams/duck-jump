@@ -22,10 +22,10 @@ int main(void) {
     SDL_Rect camera = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
     initSDL();
-    initFont(&menu.titleText);
+    initFont();
     initPlayer();
     initTextures(&menu, &pTextures);
-    initMenuButtons(&menu, menu.titleText.font);
+    initMenuButtons(&menu);
 
     game.gameState = MENU;
     int offset = PLATFORM_OFFSET;
@@ -50,14 +50,16 @@ int main(void) {
         while(game.gameState == RUNNING) {
             checkSDLPollEventGame(event);
             tick(&game.timer);
-            moveDuck(game.timer.deltaTime, true);
-            checkNearPlatforms(&platforms);
-            moveCamera(&camera);
-            generatePlatforms(&camera, player.score, &offset, &platforms, MAX);
+            if(!player.lost) {
+                moveDuck(game.timer.deltaTime, true);
+                checkNearPlatforms(&platforms);
+                moveCamera(&camera);
+                generatePlatforms(&camera, player.score, &offset, &platforms, MAX);
+                updateScore();
+            }
             renderGame(&platforms, &pTextures, &camera);
             renderPlayerSprite(&camera);
             SDL_RenderPresent(game.renderer);
-            if (player.lost) game.gameState = CLOSE;
         }
 
         while(game.gameState == SCORE) {
